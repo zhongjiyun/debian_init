@@ -18,10 +18,21 @@ RUN apt-get update && \
 RUN mkdir -p /var/run/sshd && \
     echo 'root:root' | chpasswd && \
     sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
-    sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
-    mkdir -p /etc/systemd/system/multi-user.target.wants && \
-    ln -sf /lib/systemd/system/ssh.service /etc/systemd/system/multi-user.target.wants/ssh.service && \
-    ln -sf /lib/systemd/system/ssh.socket /etc/systemd/system/sockets.target.wants/ssh.socket
+    sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+# 启用 SSH 服务（创建 systemd 符号链接）
+RUN mkdir -p /etc/systemd/system/multi-user.target.wants && \
+    mkdir -p /etc/systemd/system/sockets.target.wants && \
+    if [ -f /lib/systemd/system/ssh.service ]; then \
+        ln -sf /lib/systemd/system/ssh.service /etc/systemd/system/multi-user.target.wants/ssh.service; \
+    elif [ -f /usr/lib/systemd/system/ssh.service ]; then \
+        ln -sf /usr/lib/systemd/system/ssh.service /etc/systemd/system/multi-user.target.wants/ssh.service; \
+    fi && \
+    if [ -f /lib/systemd/system/ssh.socket ]; then \
+        ln -sf /lib/systemd/system/ssh.socket /etc/systemd/system/sockets.target.wants/ssh.socket; \
+    elif [ -f /usr/lib/systemd/system/ssh.socket ]; then \
+        ln -sf /usr/lib/systemd/system/ssh.socket /etc/systemd/system/sockets.target.wants/ssh.socket; \
+    fi
 
 # 配置 root 用户的 SSH 公钥
 RUN mkdir -p /root/.ssh && \

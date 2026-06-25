@@ -16,18 +16,12 @@
 
 ## 使用方法
 
-### 构建镜像
-
-```bash
-docker build -t debian-init .
-```
-
 ### 运行容器
 
-由于容器使用 systemd，需要以特权模式运行：
+由于容器使用 systemd，需要以特权模式运行。在项目目录下执行（会将当前目录挂载到容器内 `/app`）：
 
 ```bash
-docker run -d --privileged --name debian-init -p 2222:22 debian-init
+docker rm -f code; docker run -itd --name=code --pull=always -p 30002:22 --privileged -v .:/app ghcr.io/zhongjiyun/debian_init /usr/sbin/init
 ```
 
 ### SSH 连接
@@ -35,12 +29,18 @@ docker run -d --privileged --name debian-init -p 2222:22 debian-init
 默认 root 密码为 `root`：
 
 ```bash
-ssh -p 2222 root@localhost
+ssh -p 30002 root@localhost
+```
+
+### 本地构建（可选）
+
+```bash
+docker build -t debian-init .
 ```
 
 ## GitHub Actions
 
 本项目配置了 GitHub Actions workflow，会自动构建并推送镜像到 GitHub Container Registry (ghcr.io)。
 
-镜像地址：`ghcr.io/<your-username>/<repository-name>`
+镜像地址：`ghcr.io/zhongjiyun/debian_init`
 

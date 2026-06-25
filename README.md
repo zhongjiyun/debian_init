@@ -4,13 +4,25 @@
 
 ## 包含的软件包
 
-- sudo
-- curl
-- tmux
-- systemd (init)
-- git
-- openssh-server
-- locales（中文 locale）
+### 基础环境
+
+- sudo, curl, wget, tmux, systemd (init)
+- git, openssh-server / openssh-client
+- locales（中文 locale，`zh_CN.UTF-8`）
+- ca-certificates
+
+### 语言与构建
+
+- build-essential, pkg-config, libssl-dev
+- Python 3（pip、venv）
+- nvm + 最新 Node.js（npm、npx，可通过 `nvm install` 切换版本）
+
+### 日常 CLI 工具
+
+- jq, ripgrep (`rg`), fd-find (`fd`), tree
+- vim, nano, less, file
+- unzip, zip
+- procps（`ps` / `top`）, iproute2（`ip`）, dnsutils（`dig`）
 
 默认语言环境为 `zh_CN.UTF-8`，SSH 登录后终端可正常显示中文。
 

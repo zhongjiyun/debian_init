@@ -3,20 +3,54 @@ FROM debian:latest
 # 设置环境变量，避免交互式安装
 ENV DEBIAN_FRONTEND=noninteractive
 
-# 更新包列表并安装必要的软件包
+# 更新包列表并安装基础与开发工具
 RUN apt-get update && \
     apt-get install -y \
     sudo \
     curl \
+    wget \
     tmux \
     systemd \
     git \
     openssh-server \
+    openssh-client \
     locales \
+    ca-certificates \
+    build-essential \
+    pkg-config \
+    libssl-dev \
+    python3 \
+    python3-pip \
+    python3-venv \
+    jq \
+    ripgrep \
+    fd-find \
+    tree \
+    vim \
+    nano \
+    less \
+    unzip \
+    zip \
+    procps \
+    iproute2 \
+    dnsutils \
+    file \
     && sed -i 's/# \(zh_CN.UTF-8\)/\1/' /etc/locale.gen \
     && sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen \
     && locale-gen \
+    && ln -sf /usr/bin/fdfind /usr/local/bin/fd \
     && rm -rf /var/lib/apt/lists/*
+
+# nvm + 最新 Node.js
+ENV NVM_DIR=/root/.nvm
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash \
+    && . "$NVM_DIR/nvm.sh" \
+    && nvm install node \
+    && nvm alias default node \
+    && NODE_BIN="$(dirname "$(command -v node)")" \
+    && ln -sf "$NODE_BIN/node" /usr/local/bin/node \
+    && ln -sf "$NODE_BIN/npm" /usr/local/bin/npm \
+    && ln -sf "$NODE_BIN/npx" /usr/local/bin/npx
 
 ENV LANG=zh_CN.UTF-8 \
     LANGUAGE=zh_CN:zh \

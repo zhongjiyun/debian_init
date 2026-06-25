@@ -10,6 +10,9 @@
 - systemd (init)
 - git
 - openssh-server
+- locales（中文 locale）
+
+默认语言环境为 `zh_CN.UTF-8`，SSH 登录后终端可正常显示中文。
 
 ## 使用方法
 

@@ -12,7 +12,15 @@ RUN apt-get update && \
     systemd \
     git \
     openssh-server \
+    locales \
+    && sed -i 's/# \(zh_CN.UTF-8\)/\1/' /etc/locale.gen \
+    && sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen \
+    && locale-gen \
     && rm -rf /var/lib/apt/lists/*
+
+ENV LANG=zh_CN.UTF-8 \
+    LANGUAGE=zh_CN:zh \
+    LC_ALL=zh_CN.UTF-8
 
 # 配置 SSH 服务
 RUN mkdir -p /var/run/sshd && \

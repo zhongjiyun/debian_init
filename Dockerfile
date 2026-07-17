@@ -31,6 +31,7 @@ RUN apt-get update && \
     less \
     unzip \
     zip \
+    zsh \
     procps \
     iproute2 \
     dnsutils \
